@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 ########################################################
-# rTorrent WebUI Installer 2009 November 13 Version 4.0 #
+# rTorrent WebUI Installer 2010 July 18 Version 4.0 (modded by dcorwin822)
 ########################################################
 # Author: daymun (http://github.com/daymun)
 # Coauthor: JMV290 (http://github.com/JMV290)
@@ -23,9 +23,11 @@ function fail {
 }
 
 function downloadWtorrent {
+	#Install dependencys like Lighttpd and such
+	sudo apt-get -y install screen mc lighttpd gawk php5-cgi php5-common php5-sqlite php5-xmlrpc php5-curl sqlite subversion
 	# Download the latest wTorrent release
 	echo "Downloading wTorrent..."
-	sudo svn co -q svn://wtorrent-project.org/repos/trunk/wtorrent/ /var/www/ || fail "Failed to check out the latest wTorrent release from 'svn://wtorrent-project.org/repos/trunk/wtorrent/'. You can download it manually to '/var/www/'."
+	sudo svn co -q svn://svn.wtorrent-project.org/wtorrent/ /var/www/ || fail "Failed to check out the latest wTorrent release from 'svn://svn.wtorrent-project.org/wtorrent/'. You can download it manually to '/var/www/'."
 	sudo touch /var/www/db/database.db
 	sudo chown -R www-data:www-data /var/www/db/ /var/www/torrents/ /var/www/tpl_c/
 	sudo chmod 777 -R /var/www/conf/
@@ -36,10 +38,12 @@ function downloadWtorrent {
 }
 
 function downloadRutorrent {
+	#Install dependencys like Lighttpd and such
+	sudo apt-get -y install screen mc lighttpd gawk php5-cgi php5-common php5-sqlite php5-xmlrpc php5-curl sqlite subversion
 	# Download the latest ruTorrent release
 	echo "Downloading ruTorrent..."
-	sudo svn co -q http://rutorrent.googlecode.com/svn/trunk/rtorrent/ /var/www/ || fail "Failed to check out the latest ruTorrent release from 'http://rutorrent.googlecode.com/svn/trunk/rtorrent/'. You can download it manually to '/var/www/'."
-	sudo chmod 777 -R /var/www/settings/ /var/www/torrents/
+	sudo svn co -q http://rutorrent.googlecode.com/svn/trunk/rutorrent/ /var/www/ || fail "Failed to check out the latest ruTorrent release from 'http://rutorrent.googlecode.com/svn/trunk/rtorrent/'. You can download it manually to '/var/www/'."
+	sudo chmod 777 -R /var/www/share/settings/ /var/www/share/torrents/
 	echo "DONE"
 
 	echo "rTorrent and ruTorrent have been installed. Visit http://your.servers.ip.address/ and edit your settings to complete the configuration."
@@ -49,13 +53,13 @@ function downloadRutorrent {
 function installRtorrentApt {
 	# Install rTorrent and required packages
 	echo "Installing rTorrent and required packages..."
-	sudo apt-get -y install rtorrent screen mc lighttpd gawk php5-cgi php5-common php5-sqlite php5-xmlrpc php5-curl sqlite subversion
+	sudo apt-get -y install rtorrent
 	echo "DONE"
 }
 
 function installRtorrentSvn {
 	# Install dependencies
-	sudo apt-get -y install autoconf automake autotools-dev binutils build-essential bzip2 ca-certificates comerr-dev cpp cpp-4.1 dpkg-dev file g++ g++-4.1 gawk gcc gcc-4.1 libapr1 libaprutil1 libc6-dev libexpat1 libidn11 libidn11-dev libkadm55 libkrb5-dev libmagic1 libncurses5-dev libneon26 libpcre3 libpq5 libsigc++-2.0-dev libsqlite0 libsqlite3-0 libssl-dev libssp0-dev libstdc++6-4.1-dev libsvn1 libtool libxml2 linux-libc-dev lynx m4 make mime-support ntp ntpdate openssl patch pkg-config ucf zlib1g-dev libcurl4-openssl-dev || fail "Failed to install dependencies."
+	sudo apt-get -y install libcppunit-dev autoconf automake autotools-dev binutils build-essential bzip2 ca-certificates comerr-dev cpp cpp-4.1 dpkg-dev file g++ g++-4.1 gawk gcc gcc-4.1 libapr1 libaprutil1 libc6-dev libexpat1 libidn11 libidn11-dev libkdb5-4 libgssrpc4 libkrb5-dev libmagic1 libncurses5-dev libneon26 libpcre3 libpq5 libsigc++-2.0-dev libsqlite0 libsqlite3-0 libssl-dev libssp0-dev libstdc++6-4.1-dev libsvn1 libtool libxml2 linux-libc-dev lynx m4 make mime-support ntp ntpdate openssl patch pkg-config ucf zlib1g-dev libcurl4-openssl-dev || fail "Failed to install dependencies."
 
 	# Download and install xmlrpc
 	cd
@@ -81,7 +85,9 @@ function installRtorrentSvn {
 	sudo ./configure --with-xmlrpc-c || fail "Failed to configure rtorrent."
 	sudo make || fail "Failed to make rtorrent."
 	sudo make install || fail "Failed to install rtorrent."
-}
+	sudo echo "include /usr/local/lib" | sudo tee -a /etc/ld.so.conf
+	sudo ldconfig
+	}
 
 function configureRtorrent {
 	# Add rt user to run the rTorrent process
