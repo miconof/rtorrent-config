@@ -1,7 +1,9 @@
 scgi_port = localhost:5000
 
 # Move completed torrents to /home/rt/torrents/done/
-on_finished = move_complete,"execute=mv,-u,$d.get_base_path=,/home/rt/torrents/done/ ;d.set_directory=/home/rt/torrents/done/"
+# on_finished = move_complete,"execute=mv,-u,$d.get_base_path=,/home/rt/torrents/done/ ;d.set_directory=/home/rt/torrents/done/"
+#Updated for depreciation of on_* statements. Lets hope this works, I've yet to test it.
+system.method.set_key = event.download.finished,move_complete,"d.set_directory=/home/rt/torrents/done/ ;execute=mv,-u,$d.get_base_path=,/home/rt/torrents/done/"
 
 # Maximum and minimum number of peers to connect to per torrent.
 #min_peers = 40
