@@ -28,8 +28,8 @@ SCRIPTNAME=/etc/init.d/$NAME
 PID_FILE=$session/rtorrent.pid
 DAEMON_OPTS=" -n $socket $RTORRENT"
 
-test -x $DAEMON || echo "Daemon $DAEMON not found" && exit 0
-test -x $RTORRENT || echo "Daemon $RTORRENT not found" && exit 0
+test -x $DAEMON || echo "Daemon $DAEMON not found"
+test -x $RTORRENT || echo "Daemon $RTORRENT not found"
 
 set -e
 
@@ -54,16 +54,22 @@ fi
 case "$1" in
   start)
         echo -n "Starting $DESC: $NAME"
-        start-stop-daemon -c $user --start --pidfile $PID_FILE --env TERM="xterm" --exec $DAEMON -- $DAEMON_OPTS
+        start-stop-daemon -c $user --start --pidfile $PID_FILE --exec $DAEMON -- $DAEMON_OPTS
+        rtpid=`ps -u pi | grep rtorrent | awk '{print($1)}'`
+        echo $rtpid > $PID_FILE
         ;;
   stop)
         echo -n "Stopping $DESC: $NAME"
         start-stop-daemon --stop --pidfile $PID_FILE --retry 15
+        rm -f "$PID_FILE"
         ;;
   restart|force-reload)
         echo -n "Restarting $DESC: $NAME"
         start-stop-daemon --stop --pidfile $PID_FILE --retry 15
-        start-stop-daemon -c $user --start --pidfile $PID_FILE --env TERM="xterm" --exec $DAEMON -- $DAEMON_OPTS
+        rm -f "$PID_FILE"
+        start-stop-daemon -c $user --start --pidfile $PID_FILE --exec $DAEMON -- $DAEMON_OPTS
+        rtpid=`ps -u pi | grep rtorrent | awk '{print($1)}'`
+        echo $rtpid > $PID_FILE
         ;;
   *)
         echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload}" >&2

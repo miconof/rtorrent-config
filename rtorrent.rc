@@ -10,39 +10,74 @@ max_peers_seed = 20
 max_uploads = 2
 
 # Global upload and download rate in KiB. "0" for unlimited.
-download_rate = 600
+download_rate = 800
 upload_rate = 5
 
 # Default directory to save the downloaded torrents.
-directory = /media/WDElementsPlay/Downloads/incomplete
+directory = /media/WDElementsPlay/Downloads/download
 
 # Default session directory. Make sure you don't run multiple instance
 # of rtorrent using the same session directory. Perhaps using a
 # relative path?
 session = /home/pi/.rtsession
 
+# Group 1 - Auto - seed until .01 or 1M then delete data
+group.insert_persistent_view = group_1
+group.group_1.ratio.enable=
+group.group_1.ratio.max.set=1
+group.group_1.ratio.upload.set=1M
+
+# Group 2 - Manual - seed until .01 or 1M then stop torrent
+group.insert_persistent_view = group_2
+group.group_2.ratio.enable=
+group.group_2.ratio.max.set=1
+group.group_2.ratio.upload.set=1M
+
 # Watch a directory for new torrents, and stop those that have been deleted.
 #sickbeard
-schedule = watch_directory_2,10,10,"load_start=/home/pi/repos/Sick-Beard/torrents/*.torrent,d.set_directory=/media/WDElementsPlay/Downloads/sickbeard_complete"
-schedule = tied_directory_2,10,10,start_tied=
-schedule = untied_director_2,5,5,stop_untied=
+schedule = watch_directory_2,10,10,"load_start=/home/pi/repos/Sick-Beard/torrents/*.torrent, d.set_custom1=tv, \"d.set_custom=isauto,/media/WDElementsPlay/Downloads/complete/sickbeard/\""
+#schedule = tied_directory_2,10,10,start_tied=
+#schedule = untied_director_2,5,5,stop_untied=
 #couchpotato
-schedule = watch_directory_3,10,10,"load_start=/home/pi/repos/CouchPotatoServer/torrents/*.torrent,d.set_directory=/media/WDElementsPlay/Downloads/couchpotato_complete"
-schedule = tied_directory_3,10,10,start_tied=
-schedule = untied_directory_3,5,5,stop_untied=
+schedule = watch_directory_3,10,10,"load_start=/home/pi/repos/CouchPotatoServer/torrents/*.torrent, d.set_custom1=tv, \"d.set_custom=isauto,/media/WDElementsPlay/Downloads/complete/couchpotato/\""
+#schedule = tied_directory_3,10,10,start_tied=
+#schedule = untied_directory_3,5,5,stop_untied=
 #others
-schedule = watch_directory_4,10,10,"load_start=/home/pi/torrents/*.torrent,d.set_directory=/media/WDElementsPlay/Downloads/other"
-schedule = tied_directory_4,10,10,start_tied=
-schedule = untied_directory_4,5,5,stop_untied=
+schedule = watch_directory_4,10,10,"load_start=/home/pi/torrents/*.torrent"
+#schedule = tied_directory_4,10,10,start_tied=
+#schedule = untied_directory_4,5,5,stop_untied=
 
 # Close torrents when diskspace is low.
-schedule = low_diskspace,5,60,close_low_diskspace=5000M
+#schedule = low_diskspace,5,60,close_low_diskspace=5000M
 
-# Stop torrents when reaching upload ratio in percent,
-# when also reaching total upload in bytes, or when
-# reaching final upload ratio in percent.
-# example: stop at ratio 2.0 with at least 200 MB uploaded, or else ratio 20.0
-schedule = ratio,60,60,"stop_on_ratio=1,2M,2"
+# Set ratio group based on isauto
+system.method.set_key = event.download.inserted_new,set_ratio,"branch=d.get_custom=isauto,view.set_visible=group_1,view.set_visible=group_2"
+
+# Set autodir to concatination of isauto and torrent name
+system.method.set_key = event.download.inserted_new,set_autodir,"d.set_custom=autodir,\"$cat=$d.get_custom=isauto,$d.get_name=\""
+
+# Set manualdir to concatination of complete dir and label name
+system.method.set_key = event.download.inserted_new,set_manualdir,"d.set_custom=manualdir,\"$cat=/media/WDElementsPlay/Downloads/complete/other/,$d.get_custom1=\""
+
+# Set move to dir in movedir
+system.method.set_key = event.download.inserted_new,set_movedir,"branch=d.get_custom=isauto,\"d.set_custom=movedir,$d.get_custom=autodir\",\"d.set_custom=movedir,$d.get_custom=manualdir\""
+
+# Delete .torrent
+system.method.set_key = event.download.inserted_new,del_tor,"execute={rm,-rf,--,$d.get_loaded_file=}"
+
+# Move torrent data to another folder when download is complete
+#system.method.set_key = event.download.finished,move_complete,"execute=mkdir,-p,$d.get_custom=movedir;d.set_directory=$d.get_custom=movedir;execute=mv,-u,$d.get_base_path=,$d.get_custom=movedir"
+system.method.set_key = event.download.finished,move_complete,"d.close=;execute=mkdir,-p,$d.get_custom=movedir;execute=mv,-u,$d.get_base_path=,$d.get_custom=movedir;d.erase="
+
+# Set autoseed dirctory if Auto group
+#system.method.set_key = event.download.finished,move_dir,"branch=d.get_custom=isauto,d.set_directory=/CHANGE/THIS/PATH/autoseed/"
+
+# Call rtorrentToSickBeard.py if in Auto group
+#system.method.set_key = event.download.finished,toSickbeard,"branch=d.get_custom=isauto,\"execute={/root/sickbeard/autoProcessTV/rtorrentToSickBeard.py,$d.get_custom=movedir,$d.get_name=}\""
+
+# Set actions for groups completed ratio
+#system.method.set = group.group_1.ratio.command, d.close=, "execute={mv,-u,$d.get_base_path=,/media/WDElementsPlay/Downloads/complete/sickbeard/}", d.erase=
+#system.method.set = group.group_2.ratio.command, d.close=, d.erase=
 
 # The ip address reported to the tracker.
 #ip = 127.0.0.1
