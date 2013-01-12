@@ -48,8 +48,9 @@ sudo /etc/init.d/rtorrent start
 sudo update-rc.d rtorrent defaults || fail "Failed to add rtorrrent system startup links. Is the init script already configured?"
 echo "DONE"
 
-echo "The following alias might be useful"
+echo "The following alias might be useful, setting it in bashrc."
 echo "alias rtorrent='dtach -A /home/pi/.rtsession/rtorrent.dtach /usr/bin/rtorrent'"
+echo "alias rtorrent='dtach -A /home/pi/.rtsession/rtorrent.dtach /usr/bin/rtorrent'" >> ~/.bashrc
 
 echo "rtorrent has been installed."
 exit 0
