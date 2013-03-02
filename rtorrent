@@ -26,7 +26,7 @@ DAEMON=/usr/bin/dtach
 RTORRENT=/usr/bin/rtorrent
 SCRIPTNAME=/etc/init.d/$NAME
 PID_FILE=$session/rtorrent.pid
-DAEMON_OPTS=" -n $socket $RTORRENT"
+DAEMON_OPTS=" -n $socket -e Q $RTORRENT"
 
 test -x $DAEMON || echo "Daemon $DAEMON not found"
 test -x $RTORRENT || echo "Daemon $RTORRENT not found"
