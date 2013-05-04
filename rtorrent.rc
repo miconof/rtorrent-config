@@ -42,6 +42,10 @@ schedule = watch_directory_2,10,10,"load_start=/home/pi/repos/Sick-Beard/torrent
 schedule = watch_directory_3,10,10,"load_start=/home/pi/repos/CouchPotatoServer/torrents/*.torrent, d.set_custom1=tv, \"d.set_custom=isauto,/media/WDElementsPlay/Downloads/complete/couchpotato/\""
 #schedule = tied_directory_3,10,10,start_tied=
 #schedule = untied_directory_3,5,5,stop_untied=
+#headphones
+schedule = watch_directory_3,10,10,"load_start=/home/pi/repos/headphones/torrents/*.torrent, d.set_custom1=tv, \"d.set_custom=isauto,/media/WDElementsPlay/Downloads/complete/headphones/\""
+#schedule = tied_directory_3,10,10,start_tied=
+#schedule = untied_directory_3,5,5,stop_untied=
 #others
 schedule = watch_directory_4,10,10,"load_start=/home/pi/torrents/*.torrent"
 #schedule = tied_directory_4,10,10,start_tied=
