@@ -43,13 +43,13 @@ schedule = watch_directory_3,10,10,"load_start=/home/pi/repos/CouchPotatoServer/
 #schedule = tied_directory_3,10,10,start_tied=
 #schedule = untied_directory_3,5,5,stop_untied=
 #headphones
-schedule = watch_directory_3,10,10,"load_start=/home/pi/repos/headphones/torrents/*.torrent, d.set_custom1=tv, \"d.set_custom=isauto,/media/WDElementsPlay/Downloads/complete/headphones/\""
-#schedule = tied_directory_3,10,10,start_tied=
-#schedule = untied_directory_3,5,5,stop_untied=
-#others
-schedule = watch_directory_4,10,10,"load_start=/home/pi/torrents/*.torrent"
+schedule = watch_directory_4,10,10,"load_start=/home/pi/repos/headphones/torrents/*.torrent, d.set_custom1=tv, \"d.set_custom=isauto,/media/WDElementsPlay/Downloads/complete/headphones/\""
 #schedule = tied_directory_4,10,10,start_tied=
 #schedule = untied_directory_4,5,5,stop_untied=
+#others
+schedule = watch_directory_5,10,10,"load_start=/home/pi/torrents/*.torrent"
+#schedule = tied_directory_5,10,10,start_tied=
+#schedule = untied_directory_5,5,5,stop_untied=
 
 # Close torrents when diskspace is low.
 #schedule = low_diskspace,5,60,close_low_diskspace=5000M
