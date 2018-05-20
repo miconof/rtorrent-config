@@ -39,7 +39,7 @@ schedule = watch_directory_2,10,10,"load_start=/home/pi/repos/SickRage/torrents/
 #schedule = tied_directory_2,10,10,start_tied=
 #schedule = untied_director_2,5,5,stop_untied=
 #couchpotato
-schedule = watch_directory_3,10,10,"load_start=/home/pi/repos/torrents/couchpotato/*.torrent, d.set_custom1=tv, \"d.set_custom=isauto,/media/WDElementsPlay/Downloads/complete/couchpotato/\""
+schedule = watch_directory_3,10,10,"load_start=/home/pi/torrents/couchpotato/*.torrent, d.set_custom1=tv, \"d.set_custom=isauto,/media/WDElementsPlay/Downloads/complete/couchpotato/\""
 #schedule = tied_directory_3,10,10,start_tied=
 #schedule = untied_directory_3,5,5,stop_untied=
 #headphones
