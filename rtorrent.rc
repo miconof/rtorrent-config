@@ -10,7 +10,7 @@ max_peers_seed = 20
 max_uploads = 2
 
 # Global upload and download rate in KiB. "0" for unlimited.
-download_rate = 600
+download_rate = 500
 upload_rate = 5
 
 # Default directory to save the downloaded torrents.
@@ -35,11 +35,11 @@ group.group_2.ratio.upload.set=1M
 
 # Watch a directory for new torrents, and stop those that have been deleted.
 #sickbeard
-schedule = watch_directory_2,10,10,"load_start=/home/pi/repos/Sick-Beard/torrents/*.torrent, d.set_custom1=tv, \"d.set_custom=isauto,/media/WDElementsPlay/Downloads/complete/sickbeard/\""
+schedule = watch_directory_2,10,10,"load_start=/home/pi/repos/SickRage/torrents/*.torrent, d.set_custom1=tv, \"d.set_custom=isauto,/media/WDElementsPlay/Downloads/complete/sickbeard/\""
 #schedule = tied_directory_2,10,10,start_tied=
 #schedule = untied_director_2,5,5,stop_untied=
 #couchpotato
-schedule = watch_directory_3,10,10,"load_start=/home/pi/repos/CouchPotatoServer/torrents/*.torrent, d.set_custom1=tv, \"d.set_custom=isauto,/media/WDElementsPlay/Downloads/complete/couchpotato/\""
+schedule = watch_directory_3,10,10,"load_start=/home/pi/repos/torrents/couchpotato/*.torrent, d.set_custom1=tv, \"d.set_custom=isauto,/media/WDElementsPlay/Downloads/complete/couchpotato/\""
 #schedule = tied_directory_3,10,10,start_tied=
 #schedule = untied_directory_3,5,5,stop_untied=
 #headphones
