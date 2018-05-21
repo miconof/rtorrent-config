@@ -1,19 +1,5 @@
 #!/bin/bash
 set -e
-########################################################
-# rTorrent WebUI Installer 2012 November 24
-########################################################
-# Author: daymun (http://github.com/daymun)
-# Coauthor: JMV290 (http://github.com/JMV290)
-# Modified by: miconof (http://github.com/miconof)
-# GitHub repository: http://github.com/miconof/rtorrent-webui-installer
-# Description: Automatically downloads and configures rTorrent and a WebUI; wTorrent and ruTorrent are currently supported.
-########################################################
-# This script and the configuration files are a combination of the information posted on these guides:
-# http://www.wtorrent-project.org/trac/wiki/DebianInstall/
-# http://robert.penz.name/82/howto-install-rtorrent-and-wtorrent-within-an-ubuntu-hardy-ve/
-# http://flipsidereality.com/blog/linux/rtorrent-with-wtorrent-on-debian-etch-complete-howto/
-########################################################
 
 function fail {
 	echo "$1" 1>&2
@@ -43,9 +29,9 @@ echo "DONE"
 
 # Copy and start the rtorrent init script
 echo "Copying rtorrent init script..."
-sudo cp rtorrent /etc/init.d/rtorrent || fail "Failed to copy the rtorrrent init script. Does it exist in the current directory?"
-sudo /etc/init.d/rtorrent start
-sudo update-rc.d rtorrent defaults || fail "Failed to add rtorrrent system startup links. Is the init script already configured?"
+sudo cp rtorrent.service /etc/systemd/system || fail "Failed to copy the rtorrrent init script. Does it exist in the current directory?"
+sudo systemctl start rtorrent
+sudo systemctl enable rtorrent || fail "Failed to add rtorrrent system startup links. Is the init script already configured?"
 echo "DONE"
 
 echo "The following alias might be useful, setting it in bashrc."

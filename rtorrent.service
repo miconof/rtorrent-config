@@ -1,0 +1,19 @@
+[Unit]
+Description=rtorrent application instance
+After=network.target
+
+[Service]
+User=pi
+Group=pi
+
+Type=forking
+Environment="TERM=xterm"
+KillMode=none
+ExecStart=-/usr/bin/dtach -n /home/pi/.rtsession/rtorrent.dtach -e Q /usr/bin/rtorrent 
+   # dtach -n <user specified FIFO name> -e <user specified character> /usr/bin/rtorrent 
+ExecStop=/usr/bin/killall -w -s INT /usr/bin/rtorrent
+   # -e (exact match) and -u (user name) were added above to stop specific processes
+   #  and may be omitted here because only one rtorrent will be running
+
+[Install]
+WantedBy=multi-user.target
