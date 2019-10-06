@@ -33,11 +33,11 @@ group.group_2.ratio.upload.set=1M
 
 # Watch a directory for new torrents, and stop those that have been deleted.
 
-#sickbeard
+#sickchill
 schedule = watch_directory_2,10,10,"load_start=/home/pi/repos/SickChill/torrents/*.torrent, d.set_custom1=sickbeard"
 
-#couchpotato
-schedule = watch_directory_3,10,10,"load_start=/home/pi/torrents/couchpotato/*.torrent, d.set_custom1=couchpotato"
+#radarr
+schedule = watch_directory_3,10,10,"load_start=/home/pi/torrents/radarr/*.torrent, d.set_custom1=couchpotato"
 
 #headphones
 schedule = watch_directory_4,10,10,"load_start=/home/pi/repos/headphones/torrents/*.torrent, d.set_custom1=headphones"
